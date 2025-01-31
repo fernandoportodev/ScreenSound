@@ -1,36 +1,74 @@
-﻿Album albumBaroes = new Album("Barões da Pisadinha");
+﻿using ScreenSound.Menus;
+using ScreenSound.Modelos;
 
-Banda banda = new Banda("Barões da Pisadinha");
-banda.AdicionarAlbum(albumBaroes);
-banda.ExibirDiscografia();
 
-Musica musica1 = new("Ta rocheda", banda, 180, true);
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        // Screen Sound
+        string mensagemBoasVindas = "Boas vindas ao Screen Sound";
 
-Musica musica2 = new("Nunca vai ser eu", banda, 240, false);
+        Dictionary<string, Banda> dicionarioBandas = new();
+        //dicionarioBandas.Add(banda1.Nome, banda1);
+        //dicionarioBandas.Add(banda2.Nome, banda2);
+        //Banda banda1 = new("Ira");
+        //banda1.AdicionarNota(10);
+        //banda1.AdicionarNota(9);
+        //banda1.AdicionarNota(8);
+        //Banda banda2 = new("The Beatles");
+        //banda2.AdicionarNota(10);
+        //banda2.AdicionarNota(10);
+        //banda2.AdicionarNota(10);
 
-albumBaroes.AdicionarMusica(musica1);
-albumBaroes.AdicionarMusica(musica2);
+        Dictionary<int, Menu> dicionarioMenu = new();
+        dicionarioMenu.Add(1, new MenuRegistrarBanda());
+        dicionarioMenu.Add(2, new MenuRegistrarAlbum());
+        dicionarioMenu.Add(3, new MenuExibirBandas());
+        dicionarioMenu.Add(4, new MenuAvaliarBanda());
+        dicionarioMenu.Add(5, new MenuExibirDetalhes());
+        dicionarioMenu.Add(0, new MenuSair());
 
-/************************************************************************************************************/
+        void ExibirLogo()
+        {
+            Console.WriteLine(mensagemBoasVindas);
+            Console.WriteLine(@"
+░██████╗░█████╗░██████╗░███████╗███████╗███╗░░██╗  ░██████╗░█████╗░██╗░░░██╗███╗░░██╗██████╗░
+██╔════╝██╔══██╗██╔══██╗██╔════╝██╔════╝████╗░██║  ██╔════╝██╔══██╗██║░░░██║████╗░██║██╔══██╗
+╚█████╗░██║░░╚═╝██████╔╝█████╗░░█████╗░░██╔██╗██║  ╚█████╗░██║░░██║██║░░░██║██╔██╗██║██║░░██║
+░╚═══██╗██║░░██╗██╔══██╗██╔══╝░░██╔══╝░░██║╚████║  ░╚═══██╗██║░░██║██║░░░██║██║╚████║██║░░██║
+██████╔╝╚█████╔╝██║░░██║███████╗███████╗██║░╚███║  ██████╔╝╚█████╔╝╚██████╔╝██║░╚███║██████╔╝
+╚═════╝░░╚════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░╚══╝  ╚═════╝░░╚════╝░░╚═════╝░╚═╝░░╚══╝╚═════╝░
+");
+        }
 
-Podcast podcast = new("Fernando", "PortoDev");
-Episodio episodio1 = new(2, "Técnicas de .ASP NET Core", 45);
-episodio1.AdicionarConvidados("Julio");
-episodio1.AdicionarConvidados("Junior");
-episodio1.AdicionarConvidados("Cleyton");
 
-Episodio episodio2 = new(3, "Técnicas de aprendizado", 45);
-episodio2.AdicionarConvidados("Julia");
-episodio2.AdicionarConvidados("Eva");
-episodio2.AdicionarConvidados("Ravenna");
+        void ExibirOpcoesMenu()
+        {
+            ExibirLogo();
+            Console.WriteLine("Digite [1] para registrar uma banda\n");
+            Console.WriteLine("Digite [2] para registrar o álbum de uma banda\n");
+            Console.WriteLine("Digite [3] para mostrar todas as bandas\n");
+            Console.WriteLine("Digite [4] para avaliar uma banda\n");
+            Console.WriteLine("Digite [5] para exibir os detalhes de uma banda\n");
+            Console.WriteLine("Digite [0] para sair\n");
+            Console.Write("Digite a sua opção: ");
 
-Episodio episodio3 = new(1, "Técnicas de C#", 45);
-episodio3.AdicionarConvidados("Leo");
-episodio3.AdicionarConvidados("Odim");
-episodio3.AdicionarConvidados("Brage");
+            string leituraOpcao = Console.ReadLine()!;
+            int opcaoEscolhida = int.Parse(leituraOpcao);
 
-podcast.AdicionarEpisodio(episodio1);
-podcast.AdicionarEpisodio(episodio2);
-podcast.AdicionarEpisodio(episodio3);
-podcast.ExibirDetalhes();
+            if(dicionarioMenu.ContainsKey(opcaoEscolhida))
+            {
+                Menu menuExibido = dicionarioMenu[opcaoEscolhida];
+                menuExibido.Executar(dicionarioBandas);
+                if (opcaoEscolhida > 0) ExibirOpcoesMenu();
+            } else
+            {
+                Console.WriteLine("Opção inválida");
+            }
 
+        }
+
+        ExibirOpcoesMenu();
+    }
+}
